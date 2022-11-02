@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"	
+	template="/templates/layout.xhtml"	>
+
+	<ui:define name="conteudo">
+	
+	
+	<h:form id="formListagem">
+			<p:panel header="Listas de Empresas">
+				<p:dataTable emptyMessage="Nenhum registro encontrado"
+					paginator="true" rows="10" value="#{empresaBean.empresas}" var="empresa" id="tabela">
+					<f:facet name="header">
+						<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+							actionListener="#{empresaBean.novo}"
+							update=":formCadastro:pnCadastro" >
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</p:commandButton>
+					</f:facet>
+
+					<p:column headerText="Empresa" filterBy="#{empresa.nome}"
+						sortBy="#{empresa.nome}">
+						<h:outputText value="#{empresa.nome}" />
+					</p:column>
+					<p:column headerText="Cidade" filterBy="#{empresa.cidade.nome}"
+						sortBy="#{empresa.cidade.nome}" >
+						<h:outputText value="#{empresa.cidade.nome}" />
+						<h:outputText value=" - " />
+					<h:outputText value="#{empresa.cidade.estado.sigla}" />
+					</p:column>
+					<p:column headerText="Opções" style="width:75px">
+						<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{empresaBean.editar}"
+						update=":formCadastro:pnCadastro"
+						oncomplete="PF('dialogo').show();">
+						<f:attribute name="empresaSelecionada" value="#{empresa}" />
+						<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{empresaBean.excluir}"
+							update=":msgGlobal :formListagem:tabela ">
+							<p:confirm header="Confirmação"
+								message="Deseja excluir o estado?" icon="ui-icon-alert" />
+							<f:attribute name="empresaSelecionada" value="#{empresa}" />
+							
+						</p:commandButton>
+
+
+					</p:column>
+
+				</p:dataTable>
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</p:panel>
+		</h:form>
+
+		<p:dialog header="Cadastro de Empresa" widgetVar="dialogo"
+			draggable="false" resizable="false" modal="true" closable="false"
+			appendTo="@(body)">
+
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2" id="pnCadastro">
+					<p:outputLabel value="Nome da Empresa:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{empresaBean.empresa.nome}" required="true"
+						requiredMessage="O campo 'Nome' é obrigatório" />
+
+					<p:outputLabel for="estado" value="Estado:" />
+					<p:selectOneMenu id="estado" filter="true"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{empresaBean.estado}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um estado" />
+						<f:selectItems value="#{empresaBean.estados}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.nome}" />
+						<p:ajax listener="#{empresaBean.popular}"
+							update=":formCadastro:cidade" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="cidade" value="Cidade:" />
+					<p:selectOneMenu id="cidade" filter="true" required="true"
+						requiredMessage="O campo 'Cidade' é obrigatório"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{empresaBean.empresa.cidade}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma cidade" />
+						<f:selectItems value="#{empresaBean.cidades}" var="cidade"
+							itemValue="#{cidade}" itemLabel="#{cidade.nome}" />
+					</p:selectOneMenu>
+										
+					
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						actionListener="#{empresaBean.salvar}"
+						update=":msgGlobal :formCadastro:pnCadastro :formListagem:tabela">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+
+					<p:commandButton value="Cancelar"
+						oncomplete="PF('dialogo').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+	
+	
+	
+	
+	
+	</ui:define>
+</ui:composition>

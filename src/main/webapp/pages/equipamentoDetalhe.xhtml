@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/layout.xhtml">
+
+	<ui:define name="conteudo">
+
+
+		<h:form id="formListagem">
+			<p:panel header="Listas dos Equipamentos">
+				<p:dataTable emptyMessage="Nenhum registro encontrado"
+					paginator="true" rows="10" 
+					var="equipamento" id="tabela">
+					
+
+					<p:column headerText="Código" style="width:75px">
+						<h:outputText value="#{equipamento.id}" />
+					</p:column>
+					<p:column headerText="Tipo"  style="width:100px">
+						<h:outputText value="#{equipamento.tipo}" />
+					</p:column>
+					<p:column headerText="Modelo" >
+						<h:outputText value="#{equipamento.modelo}" />
+					</p:column>
+					<p:column headerText="Fabricante">
+						<h:outputText value="#{equipamento.fabricante.nome}" />
+					</p:column>
+					<p:column headerText="Númeo Série">
+						<h:outputText value="#{equipamento.n_serie}" />
+					</p:column>
+					<p:column headerText="Númeo Patrimonio">
+						<h:outputText value="#{equipamento.n_tag}" />
+					</p:column>
+					<p:column headerText="Matricula">
+						<h:outputText value="#{equipamento.funcionario.matricula}" />
+					</p:column>
+					<p:column headerText="Funcionário">
+						<h:outputText value="#{equipamento.funcionario.pessoa.first_nome}" />
+						<h:outputText value=" " />
+						<h:outputText value="#{equipamento.funcionario.pessoa.last_nome}" />
+					</p:column>
+					<p:column headerText="Status">
+						<h:outputText value="#{equipamento.statusFormatado}" />
+					</p:column>
+
+
+				
+
+				</p:dataTable>
+				
+			</p:panel>
+		</h:form>
+
+		
+
+	</ui:define>
+</ui:composition>

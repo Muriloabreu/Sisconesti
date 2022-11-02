@@ -1,0 +1,5 @@
+br\com\sisconesti\dao\EstadoDAOTest.class
+br\com\sisconesti\dao\EmpresaDAOTest.class
+br\com\sisconesti\test\HibernateUtilTest.class
+br\com\sisconesti\dao\CidadeDAOTest.class
+br\com\sisconesti\dao\FuncionarioDAOTest.class

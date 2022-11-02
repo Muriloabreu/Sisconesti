@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/layout.xhtml">
+
+	<ui:define name="conteudo">
+
+
+		<h:form id="formListagem">
+			<p:panel header="Listas dos Equipamentos">
+				<p:dataTable emptyMessage="Nenhum registro encontrado"
+					paginator="true" rows="10" value="#{equipamentoBean.equipamentos}"
+					var="equipamento" id="tabela">
+					<f:facet name="header">
+						<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+							actionListener="#{equipamentoBean.novo}"
+							update=":formCadastro:pnCadastro">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					</f:facet>
+
+					<p:column headerText="Código" filterBy="#{equipamento.id}"
+						style="width:75px" sortBy="#{equipamento.id}">
+						<h:outputText value="#{equipamento.id}" />
+					</p:column>
+					<p:column headerText="Tipo" filterBy="#{equipamento.tipo}"
+						sortBy="#{equipamento.tipo}" style="width:100px">
+						<h:outputText value="#{equipamento.tipo}" />
+					</p:column>
+					<p:column headerText="Modelo" filterBy="#{equipamento.modelo}"
+						sortBy="#{equipamento.modelo}">
+						<h:outputText value="#{equipamento.modelo}" />
+					</p:column>
+					<p:column headerText="Fabricante"
+						filterBy="#{equipamento.fabricante.nome}"
+						sortBy="#{equipamento.fabricante.nome}">
+						<h:outputText value="#{equipamento.fabricante.nome}" />
+					</p:column>
+					<p:column headerText="Númeo Série"
+						filterBy="#{equipamento.n_serie}" sortBy="#{equipamento.n_serie}">
+						<h:outputText value="#{equipamento.n_serie}" />
+					</p:column>
+					<p:column headerText="Númeo Patrimonio"
+						filterBy="#{equipamento.n_tag}" sortBy="#{equipamento.n_tag}">
+						<h:outputText value="#{equipamento.n_tag}" />
+					</p:column>
+					<p:column headerText="Matricula"
+						filterBy="#{equipamento.funcionario.matricula}" sortBy="#{equipamento.funcionario.matricula}">
+						<h:outputText value="#{equipamento.funcionario.matricula}" />
+					</p:column>
+					<p:column headerText="Funcionário"
+						filterBy="#{equipamento.funcionario.pessoa.first_nome}" sortBy="#{equipamento.funcionario.pessoa.first_nome}">
+						<h:outputText value="#{equipamento.funcionario.pessoa.first_nome}" />
+						<h:outputText value=" " />
+						<h:outputText value="#{equipamento.funcionario.pessoa.last_nome}" />
+					</p:column>
+					<p:column headerText="Status"
+						filterBy="#{equipamento.statusFormatado}"
+						sortBy="#{equipamento.statusFormatado}">
+						<h:outputText value="#{equipamento.statusFormatado}" />
+					</p:column>
+
+
+					<p:column headerText="Opções" style="width:100px">
+				
+				
+						<p:commandButton icon="ui-icon-info"
+							actionListener="#{equipamentoBean.editar}"
+							update=":formDetalhe:pnDetalheEquipmento"
+							oncomplete="PF('dialogo').show();">
+							<f:attribute name="equipamentoSelecionado" value="#{equipamento}" />
+						</p:commandButton>					
+						<p:commandButton icon="ui-icon-pencil"
+							actionListener="#{equipamentoBean.editar}"
+							update=":formCadastro:pnCadastro"
+							oncomplete="PF('dialogo').show();">
+							<f:attribute name="equipamentoSelecionado" value="#{equipamento}" />
+						</p:commandButton>
+
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{equipamentoBean.excluir}"
+							update=":msgGlobal :formListagem:tabela ">
+							<p:confirm header="Confirmação"
+								message="Deseja excluir o equipamento?" icon="ui-icon-alert" />
+							<f:attribute name="equipamentoSelecionado" value="#{equipamento}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</p:panel>
+		</h:form>
+
+		<p:dialog header="Cadastro de Equipamentos" widgetVar="dialogo"
+			draggable="false" resizable="false" modal="true" closable="false"
+			appendTo="@(body)">
+
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2" id="pnCadastro">
+					<p:outputLabel value="Tipo" />
+					<p:selectOneMenu value="#{equipamentoBean.equipamento.tipo}">
+						<f:selectItem itemLabel="Selecione um Tipo do Equipamento" />
+						<f:selectItem itemValue="Notebook" itemLabel="Notebook" />
+						<f:selectItem itemValue="Desktop" itemLabel="Desktop" />
+						<f:selectItem itemValue="Celular" itemLabel="Celular" />
+						<f:selectItem itemValue="Impressora" itemLabel="Impressora" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Modelo:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.modelo}" required="true"
+						requiredMessage="O campo 'Sigla' é obrigatório" />
+
+					<p:outputLabel value="Número Série:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.n_serie}" required="true"
+						requiredMessage="O campo 'Sigla' é obrigatório" />
+
+					<p:outputLabel value="Número Patrimonio:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.n_tag}" required="true"
+						requiredMessage="O campo 'Patrimonio' é obrigatório" />
+						
+						<p:outputLabel  value="Fabricante" />
+					<p:selectOneMenu id="fabricante" filter="true" converter="omnifaces.SelectItemsConverter" 
+					value="#{equipamentoBean.equipamento.fabricante}" required="true" requiredMessage="O campo 'Fabricante' é obrigatório">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione um Fabricante" />
+						<f:selectItems value="#{equipamentoBean.fabricantes}" var="fabricante"
+							itemValue="#{fabricante}" itemLabel="#{fabricante.nome}" />
+					</p:selectOneMenu>				
+						
+						<p:outputLabel for="funcionario" value="Funcionário:" />
+							<p:selectOneMenu id="funcionario" filter="true" converter="omnifaces.SelectItemsConverter"
+								value="#{equipamentoBean.equipamento.funcionario}" required="true" requiredMessage="O campo 'Funcionário' é obrigatório">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Funcionário" />
+								<f:selectItems value="#{equipamentoBean.funcionarios}" var="funcionario" filterBy="#{equipamento.funcionario.matricula}" sortBy="#{equipamento.funcionario.matricula}"
+								itemValue="#{funcionario}" itemLabel="#{funcionario.matricula}  -  #{funcionario.pessoa.first_nome}" />
+								<p:ajax listener="#{equipamentoBean.popular}" update=":formCadastro:cidade :formCadastro:cidade2" />
+							</p:selectOneMenu>
+
+					<p:outputLabel for="cidade" value="Empresa:" />
+						<p:inputText id="cidade2" value="#{equipamentoBean.equipamento.funcionario.empresa.nome}" readonly="true"/>
+						<p:outputLabel for="cidade" value="Setor:" />
+						<p:inputText id="cidade" value="#{equipamentoBean.equipamento.funcionario.setor.nome}" readonly="true"/>						
+					<p:outputLabel for="status" value="status:" />
+					<p:selectOneRadio id="status"
+						value="#{equipamentoBean.equipamento.status}" required="true"
+						requiredMessage="O campo 'Status' ´obrigatório">
+						<f:selectItem itemValue="B" itemLabel="Backup" />
+						<f:selectItem itemValue="U" itemLabel="Em Uso" />
+					</p:selectOneRadio>
+					<br></br>
+					<br></br>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Observação:" />
+						<div class="card">
+							<h:form>
+								<p:inputTextarea rows="6" cols="33"
+									value="#{equipamentoBean.equipamento.observacao}" />
+							</h:form>
+						</div>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						actionListener="#{equipamentoBean.salvar}" update=":msgGlobal :formCadastro:pnCadastro :formListagem:tabela">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+
+					<p:commandButton value="Cancelar"
+						oncomplete="PF('dialogo').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+		
+		
+		
+		
+		
+		<p:dialog header="Detalhamento do Equipamento" widgetVar="dialogo"
+			draggable="false" resizable="false" modal="true" closable="false"
+			appendTo="@(body)">
+
+			<h:form id="formDetalhe">
+				<h:panelGrid columns="2" id="pnDetalheEquipmento">					
+					<p:outputLabel value="Código:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.id}" readonly="true" />
+					
+					
+					<p:outputLabel value="Tipo:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.tipo}" readonly="true" />
+					<p:outputLabel value="Modelo:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.modelo}" readonly="true" />
+
+					<p:outputLabel value="Número Série:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.n_serie}" readonly="true"/>
+
+					<p:outputLabel value="Número Patrimonio:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.n_tag}" readonly="true" />
+					<p:outputLabel value="Fabricante:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.fabricante.nome}" readonly="true" />
+					<p:outputLabel value="Fabricante:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{equipamentoBean.equipamento.funcionario.pessoa.first_nome}" readonly="true" />
+					
+					
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Voltar"
+						oncomplete="PF('dialogo').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	</ui:define>
+</ui:composition>
