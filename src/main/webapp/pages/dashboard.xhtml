@@ -10,5 +10,18 @@
 	<ui:define name="conteudo">
 	
 	
+	
+	
+	<h:form>
+		<p:panel header="Dashboard Equipamentos">
+		
+		<h:panelGroup id="pngdash" layout="block">
+			<p:chart type="pie" model="#{dashboardEquipamentoBean.pieModel}"  style="width:500px;height:400px" rendered="#{dashboardEquipamentoBean.pieModel != null}"/>
+		</h:panelGroup>
+	
+		</p:panel>
+	</h:form>
+	
+	
 	</ui:define>
 </ui:composition>
