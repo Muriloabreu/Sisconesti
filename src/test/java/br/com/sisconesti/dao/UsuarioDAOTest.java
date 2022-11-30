@@ -42,7 +42,7 @@ public class UsuarioDAOTest {
 	@Ignore
 	public void autenticar() {
 		
-		String email = "murilo.nascimento@tivit.com";
+		String email = "murilo.nascimento@teste.com";
 		String senha = "123456";
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
